@@ -1,7 +1,7 @@
 {
-  "name": "react-native-tab-view",
+  "name": "giraf-react-native-tab-view",
   "version": "2.13.0",
-  "description": "Tab view component for React Native",
+  "description": "Giraf, PBC fork of react-native-tab-view",
   "main": "lib/commonjs/index.js",
   "react-native": "lib/module/index.js",
   "module": "lib/module/index.js",
@@ -35,14 +35,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/react-native-community/react-native-tab-view.git"
+    "url": "git+https://github.com/Giraf-PBC/giraf-react-native-tab-view.git"
   },
-  "author": "Satyajit Sahoo <satyajit.happy@gmail.com> (https://github.com/satya164/)",
+  "author": {
+    "name": "Giraf, PBC",
+    "email": "engineering@giraf.app"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/react-native-community/react-native-tab-view/issues"
+    "url": "https://github.com/Giraf-PBC/giraf-react-native-tab-view/issues"
   },
-  "homepage": "https://github.com/react-native-community/react-native-tab-view#readme",
+  "homepage": "https://github.com/Giraf-PBC/giraf-react-native-tab-view#readme",
   "devDependencies": {
     "@commitlint/config-conventional": "^8.3.4",
     "@expo/vector-icons": "^10.0.6",
@@ -93,5 +96,11 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "expo": "^36.0.2",
+    "expo-asset": "^8.0.0",
+    "expo-constants": "^8.0.0",
+    "expo-keep-awake": "^8.0.0"
   }
 }
