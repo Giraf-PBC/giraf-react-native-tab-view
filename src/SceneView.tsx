@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  LayoutChangeEvent,
+} from 'react-native';
 import {
   SceneRendererProps,
   EventEmitterProps,
@@ -15,6 +21,11 @@ type Props<T extends Route> = SceneRendererProps &
     index: number;
     children: (props: { loading: boolean }) => React.ReactNode;
     style?: StyleProp<ViewStyle>;
+
+    routeKey: string;
+    handleLayout:
+      | ((event: LayoutChangeEvent, routeKey: string) => void)
+      | undefined;
   };
 
 type State = {
@@ -82,6 +93,12 @@ export default class SceneView<T extends Route> extends React.Component<
     }
   };
 
+  handleLayout = (event: LayoutChangeEvent) => {
+    if (this.props.handleLayout) {
+      this.props.handleLayout(event, this.props.routeKey);
+    }
+  };
+
   render() {
     const { navigationState, index, layout, style } = this.props;
     const { loading } = this.state;
@@ -103,6 +120,7 @@ export default class SceneView<T extends Route> extends React.Component<
             : null,
           style,
         ]}
+        onLayout={this.handleLayout}
       >
         {// Only render the route only if it's either focused or layout is available
         // When layout is not available, we must not render unfocused routes

@@ -50,6 +50,7 @@ export type Props<T extends Route> = PagerCommonProps & {
 
 type State = {
   layout: Layout;
+  focusedSceneHeightByRouteKey: { [key: string]: number | undefined };
 };
 
 const GestureHandlerWrapper = GestureHandlerRootView ?? View;
@@ -75,8 +76,9 @@ export default class TabView<T extends Route> extends React.Component<
     renderPager: (props: ChildProps<any>) => <Pager {...props} />,
   };
 
-  state = {
+  state: State = {
     layout: { width: 0, height: 0, ...this.props.initialLayout },
+    focusedSceneHeightByRouteKey: {},
   };
 
   private jumpToIndex = (index: number) => {
@@ -101,6 +103,15 @@ export default class TabView<T extends Route> extends React.Component<
         width,
       },
     });
+  };
+
+  handleFocusedSceneLayout = (event: LayoutChangeEvent, routeKey: string) => {
+    this.setState((prevState: State) => ({
+      focusedSceneHeightByRouteKey: {
+        ...prevState.focusedSceneHeightByRouteKey,
+        [routeKey]: event.nativeEvent.layout.height,
+      },
+    }));
   };
 
   render() {
@@ -163,6 +174,10 @@ export default class TabView<T extends Route> extends React.Component<
               jumpTo,
             };
 
+            const focusedSceneHeight = this.state.focusedSceneHeightByRouteKey[
+              navigationState.routes[navigationState.index].key
+            ];
+
             return (
               <React.Fragment>
                 {positionListener ? (
@@ -177,17 +192,33 @@ export default class TabView<T extends Route> extends React.Component<
                   })}
                 {render(
                   navigationState.routes.map((route, i) => {
+                    const focused = navigationState.index === i;
+                    const unfocusedSceneStyle =
+                      !focused && focusedSceneHeight
+                        ? {
+                            // Give unfocused scene a maximum height equal to focused scene's height.
+                            // This prevents unfocused scene from causing extra / empty space to appear
+                            // beneath focused scene, in the case where the unfocused scene's height would
+                            // otherwise be greater than the focused scene's height.
+                            maxHeight: focusedSceneHeight,
+                          }
+                        : undefined;
+
                     return (
                       <SceneView
                         {...sceneRendererProps}
                         addListener={addListener}
                         removeListener={removeListener}
                         key={route.key}
+                        routeKey={route.key}
+                        handleLayout={
+                          focused ? this.handleFocusedSceneLayout : undefined
+                        }
                         index={i}
                         lazy={lazy}
                         lazyPreloadDistance={lazyPreloadDistance}
                         navigationState={navigationState}
-                        style={sceneContainerStyle}
+                        style={[unfocusedSceneStyle, sceneContainerStyle]}
                       >
                         {({ loading }) =>
                           loading
