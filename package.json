@@ -1,6 +1,6 @@
 {
   "name": "giraf-react-native-tab-view",
-  "version": "2.13.0",
+  "version": "0.1.0",
   "description": "Giraf, PBC fork of react-native-tab-view",
   "main": "lib/commonjs/index.js",
   "react-native": "lib/module/index.js",
