@@ -106,10 +106,11 @@ export default class TabView<T extends Route> extends React.Component<
   };
 
   handleFocusedSceneLayout = (event: LayoutChangeEvent, routeKey: string) => {
+    const height = event.nativeEvent.layout.height;
     this.setState((prevState: State) => ({
       focusedSceneHeightByRouteKey: {
         ...prevState.focusedSceneHeightByRouteKey,
-        [routeKey]: event.nativeEvent.layout.height,
+        [routeKey]: height,
       },
     }));
   };
