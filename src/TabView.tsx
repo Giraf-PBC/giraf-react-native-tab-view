@@ -194,16 +194,21 @@ export default class TabView<T extends Route> extends React.Component<
                 {render(
                   navigationState.routes.map((route, i) => {
                     const focused = navigationState.index === i;
-                    const unfocusedSceneStyle =
-                      !focused && focusedSceneHeight
-                        ? {
-                            // Give unfocused scene a maximum height equal to focused scene's height.
-                            // This prevents unfocused scene from causing extra / empty space to appear
-                            // beneath focused scene, in the case where the unfocused scene's height would
-                            // otherwise be greater than the focused scene's height.
-                            maxHeight: focusedSceneHeight,
-                          }
-                        : undefined;
+                    const unfocusedSceneStyle = !focused
+                      ? {
+                          // Give unfocused scene a maximum height equal to focused scene's height.
+                          // This prevents, in the case where the unfocused scene's height would
+                          // otherwise be greater than the focused scene's height, the unfocused
+                          // scene from causing extra / empty scrollable space to appear beneath
+                          // focused scene if tab view is being rendered inside a ScrollView.
+                          // Default to 0, which is useful if scenes are lazily loaded:
+                          // `focusedSceneHeight` would be undefined if the scene hasn't been
+                          // focused before, but an unfocused scene that had been focused before
+                          // would otherwise have a height that could create extra / empty scrollable
+                          // space.
+                          maxHeight: focusedSceneHeight || 0,
+                        }
+                      : undefined;
 
                     return (
                       <SceneView
